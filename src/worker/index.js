@@ -12,7 +12,7 @@ if (!PORT || !NAME) {
 }
 
 const log = createLogger(NAME);
-const app = createApp({ port: PORT });
+const app = createApp({ port: PORT, name: NAME });
 
 app.listen(PORT, async () => {
 
@@ -30,5 +30,10 @@ app.listen(PORT, async () => {
 app.post("/shutdown", (req, res) => {
     pulse.stopPulse(log);
 
-    res.json({ message: `${NAME} pulse stopped` });
+    res.json({ message: `${NAME} shutting down...` });
+
+    setTimeout(() => {
+        process.exit(0);
+    }, 500);
 });
+

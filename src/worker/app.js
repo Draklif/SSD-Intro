@@ -1,12 +1,17 @@
 const express = require("express");
+const path = require("path");
 
-function createApp({ port }) {
+function createApp({ port, name }) {
 
     const app = express();
 
-    app.get("/", (req, res) => {
-        res.send(`Server running on port ${port}`);
+    app.use(express.json());
+
+    app.get("/info", (req, res) => {
+        res.json({ name, port });
     });
+
+    app.use(express.static(path.join(__dirname, "public")));
 
     return app;
 }

@@ -5,9 +5,7 @@ const processManager = require("../services/processManager");
 const registry = require("../services/registry");
 
 // Health
-router.get("/", (req, res) => {
-    res.send("Middleware is running");
-});
+router.get("/", (req, res) => {});
 
 // Create
 router.post("/create-server", (req, res) => {
