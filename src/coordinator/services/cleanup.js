@@ -10,13 +10,18 @@ function startCleanup() {
         const servers = registry.getRaw();
 
         Object.keys(servers).forEach(name => {
-            if (now - servers[name].lastPulse > timeout) {
+            if (now - servers[name].lastPulse <= timeout) return;
+            if (!servers[name].online) return;
 
-                log("INFO", `Server [${name}] timed out. Killing process...`);
+            log("WARN", `Server [${name}] timed out`);
 
-                processManager.killServer(name);
-                registry.remove(name);
-            }
+            // Nodo local
+            const killed = processManager.killServer(name);
+            if (killed) { registry.remove(name); return; }
+
+            // Nodo remoto
+            registry.setOffline(name);
+            log("WARN", `Server [${name}] marked offline`);
         });
 
     }, 10000);

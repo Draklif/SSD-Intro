@@ -53,10 +53,17 @@ async function loadServers() {
 
         const li = document.createElement("li");
 
+        const state = server.online ? "online" : "offline";
+
         li.innerHTML = `
             <div class="server-head">
-                <strong>${escapeHtml(server.name)}</strong>
-                <a href="${server.url}" target="_blank">${server.url}</a>
+                <strong>
+                    <span class="dot ${state}" title="${state}"></span>
+                    ${escapeHtml(server.name)}
+                </strong>
+                <span class="meta">
+                    ${server.messages.length} msg · ${escapeHtml(server.owner || "?")}
+                </span>
             </div>
             <ul class="messages">${items}</ul>
         `;

@@ -66,6 +66,28 @@ li {
     text-decoration: none;
 }
 
+.server-head .meta {
+    font-size: 12px;
+    opacity: 0.6;
+    white-space: nowrap;
+}
+
+.dot {
+    display: inline-block;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    margin-right: 6px;
+}
+
+.dot.online {
+    background: #7ddb8f;
+}
+
+.dot.offline {
+    background: #ff8080;
+}
+
 .messages {
     margin-top: 10px;
 }

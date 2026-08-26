@@ -5,6 +5,11 @@ const processManager = require("../services/processManager");
 const registry = require("../services/registry");
 const messages = require("../services/messages");
 
+// Identity (IP)
+function clientId(req) {
+    return String(req.ip || "").replace(/^::ffff:/, "");
+}
+
 // Health
 router.get("/", (req, res) => {});
 
@@ -23,7 +28,13 @@ router.post("/register", (req, res) => {
     if (!name || !url)
         return res.status(400).json({ error: "Name and URL required" });
 
-    registry.register(name, url);
+    const owner = clientId(req);
+    const claimed = registry.claimedBy(name);
+
+    // Un nombre pertenece a la maquina que lo reclamo primero
+    if (claimed && claimed !== owner) return res.status(409).json({ error: `Name "${name}" is already taken by another machine. Pick a different one.` });
+
+    registry.register(name, url, owner);
     res.json({ message: "Server registered successfully" });
 });
 
@@ -56,6 +67,7 @@ router.post("/send-message/:name", (req, res) => {
 
     if (!message) return res.status(400).json({ error: "Message required" });
     if (!registry.exists(name)) return res.status(404).json({ error: "Server not found" });
+    if (registry.claimedBy(name) !== clientId(req)) return res.status(403).json({ error: `Only ${name}'s own machine can send messages as ${name}` });
 
     const entry = messages.add(name, message);
     res.status(201).json(entry);
