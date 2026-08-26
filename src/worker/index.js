@@ -1,6 +1,7 @@
 const createApp = require("./app");
 const createLogger = require("./utils/logger");
 const pulse = require("./services/pulse.service");
+const messageService = require("./services/message.service");
 
 const PORT = process.argv[2];
 const NAME = process.argv[3];
@@ -25,6 +26,35 @@ app.listen(PORT, async () => {
         log
     });
 
+});
+
+// El front le manda el mensaje a SU mini server, y este lo reenvia al coordinador
+app.post("/send-message", async (req, res) => {
+    const { message } = req.body;
+
+    if (!message) return res.status(400).json({ error: "Message required" });
+
+    try {
+        const entry = await messageService.sendMessage({
+            name: NAME,
+            message,
+            middlewareUrl: MIDDLEWARE_URL,
+            log
+        });
+
+        res.status(201).json(entry);
+
+    } catch (err) {
+        // "No contesto" y "contesto con error" son fallas distintas: no las mezclamos
+        if (err.response) {
+            log("ERROR", `Coordinator rejected the message (${err.response.status})`);
+            return res.status(err.response.status).json(err.response.data);
+        }
+
+        // El coordinador puede estar caido: el mini server sigue vivo igual
+        log("ERROR", "Could not reach the coordinator");
+        res.status(502).json({ error: "Coordinator unreachable" });
+    }
 });
 
 app.post("/shutdown", (req, res) => {

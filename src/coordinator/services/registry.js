@@ -19,6 +19,10 @@ function pulse(name) {
     return true;
 }
 
+function exists(name) {
+    return Boolean(servers[name]);
+}
+
 function remove(name) {
     delete servers[name];
 }
@@ -34,6 +38,7 @@ function getRaw() {
 module.exports = {
     register,
     pulse,
+    exists,
     remove,
     getAll,
     getRaw

@@ -25,16 +25,60 @@ p {
     opacity: 0.8;
 }
 
+.send-box {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 10px;
+}
+
+#messageInput {
+    flex: 1;
+    min-width: 0;
+    padding: 10px;
+    border: none;
+    border-radius: 5px;
+}
+
 button {
     padding: 10px 20px;
     border: none;
     border-radius: 5px;
-    background: crimson;
     color: white;
     cursor: pointer;
+}
+
+#sendBtn {
+    background: #4cafef;
+}
+
+#sendBtn:hover {
+    background: #379ad6;
+}
+
+#sendBtn:disabled {
+    background: #3a5c6e;
+    cursor: default;
+}
+
+#status {
+    min-height: 18px;
+    font-size: 13px;
+    margin-bottom: 20px;
+}
+
+#status.ok {
+    color: #7ddb8f;
+}
+
+#status.error {
+    color: #ff8080;
+}
+
+#shutdownBtn {
+    background: crimson;
     width: 100%;
 }
 
-button:hover {
+#shutdownBtn:hover {
     background: darkred;
 }

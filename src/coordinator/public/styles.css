@@ -52,3 +52,41 @@ li {
     padding: 10px;
     border-radius: 5px;
 }
+
+.server-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 10px;
+}
+
+.server-head a {
+    color: #4cafef;
+    font-size: 13px;
+    text-decoration: none;
+}
+
+.messages {
+    margin-top: 10px;
+}
+
+.messages .message {
+    background: #1e1e2f;
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+    font-size: 13px;
+    padding: 6px 10px;
+    margin-bottom: 4px;
+}
+
+.messages .empty {
+    opacity: 0.5;
+    font-style: italic;
+}
+
+.messages time {
+    opacity: 0.6;
+    font-size: 11px;
+    white-space: nowrap;
+}
