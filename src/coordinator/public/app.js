@@ -1,8 +1,11 @@
 const input = document.getElementById("nameInput");
 const button = document.getElementById("createBtn");
 const list = document.getElementById("serverList");
+const reloadBtn = document.getElementById("reloadBtn");
+const lastUpdate = document.getElementById("lastUpdate");
 
 button.addEventListener("click", createServer);
+reloadBtn.addEventListener("click", loadServers);
 
 // Nunca confiamos en el texto que viene de otro nodo
 function escapeHtml(text) {
@@ -28,6 +31,21 @@ async function createServer() {
 }
 
 async function loadServers() {
+    reloadBtn.disabled = true;
+    reloadBtn.innerText = "Loading...";
+
+    try {
+        await renderServers();
+        lastUpdate.innerText = `actualizado ${new Date().toLocaleTimeString()}`;
+    } catch {
+        lastUpdate.innerText = "no se pudo actualizar";
+    }
+
+    reloadBtn.disabled = false;
+    reloadBtn.innerText = "Reload";
+}
+
+async function renderServers() {
     const res = await fetch("/servers");
     const servers = await res.json();
 
@@ -73,4 +91,3 @@ async function loadServers() {
 }
 
 loadServers();
-setInterval(loadServers, 3000);

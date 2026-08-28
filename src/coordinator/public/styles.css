@@ -66,6 +66,34 @@ li {
     text-decoration: none;
 }
 
+.list-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 10px;
+}
+
+.list-head h2 {
+    margin: 0;
+}
+
+.list-actions {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+#lastUpdate {
+    font-size: 12px;
+    opacity: 0.55;
+    white-space: nowrap;
+}
+
+#reloadBtn:disabled {
+    background: #3a5c6e;
+    cursor: default;
+}
+
 .server-head .meta {
     font-size: 12px;
     opacity: 0.6;
