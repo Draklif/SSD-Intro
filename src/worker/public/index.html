@@ -9,11 +9,23 @@
         <h1 id="serverName"></h1>
         <p id="serverPort"></p>
 
-        <div class="send-box">
-            <input id="messageInput" placeholder="Escribe un mensaje" />
-            <button id="sendBtn">Send</button>
+        <div class="field">
+            <label for="parentInput">Coordinador padre</label>
+            <div class="row">
+                <input id="parentInput" placeholder="http://ip:3000" />
+                <button id="parentBtn">Switch</button>
+            </div>
+            <p id="parentStatus" class="hint"></p>
         </div>
-        <p id="status"></p>
+
+        <div class="field">
+            <label for="messageInput">Mensaje</label>
+            <div class="row">
+                <input id="messageInput" placeholder="Escribe un mensaje" />
+                <button id="sendBtn">Send</button>
+            </div>
+            <p id="status" class="hint"></p>
+        </div>
 
         <button id="shutdownBtn">Shutdown</button>
     </div>

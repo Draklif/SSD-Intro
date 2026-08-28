@@ -2,48 +2,37 @@ const axios = require("axios");
 
 let pulseInterval = null;
 
-function startPulse({ name, port, middlewareUrl, log }) {
+async function register({ name, port, middlewareUrl }) {
+    await axios.post(`${middlewareUrl}/register`, {
+        name,
+        url: `http://localhost:${port}`
+    }, { timeout: 5000 });
+}
 
-    async function register() {
-        await axios.post(`${middlewareUrl}/register`, {
-            name,
-            url: `http://localhost:${port}`
-        });
-    }
+function startPulse({ name, middlewareUrl, log }) {
+    stopPulse();
 
-    async function sendPulse() {
-        await axios.post(`${middlewareUrl}/pulse/${name}`);
-    }
-
-    return (async function init() {
+    pulseInterval = setInterval(async () => {
         try {
-            await register();
-            log("INFO", "Registered successfully");
-
-            pulseInterval = setInterval(async () => {
-                try {
-                    await sendPulse();
-                    log("INFO", "Pulse sent");
-                } catch {
-                    log("ERROR", "No pulse");
-                }
-            }, 5000);
-
+            await axios.post(`${middlewareUrl}/pulse/${name}`, {}, { timeout: 5000 });
+            log("INFO", "Pulse sent");
         } catch {
-            log("ERROR", "Could not register to middleware");
+            log("ERROR", "No pulse");
         }
-    })();
+    }, 5000);
 }
 
 function stopPulse(log) {
-    if (pulseInterval) {
-        clearInterval(pulseInterval);
-        pulseInterval = null;
-        log("WARN", "Stopped sending pulse");
-    }
+    if (!pulseInterval) return;
+
+    clearInterval(pulseInterval);
+    pulseInterval = null;
+
+    if (log) log("WARN", "Stopped sending pulse");
 }
 
 module.exports = {
+    register,
     startPulse,
     stopPulse
 };
