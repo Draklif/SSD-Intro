@@ -116,6 +116,26 @@ li {
     background: #ff8080;
 }
 
+.server-addr {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 10px;
+    margin-top: 4px;
+    font-size: 12px;
+}
+
+.server-addr a {
+    color: #4cafef;
+    text-decoration: none;
+    word-break: break-all;
+}
+
+.server-addr .ip {
+    opacity: 0.4;
+    white-space: nowrap;
+}
+
 .messages {
     margin-top: 10px;
 }

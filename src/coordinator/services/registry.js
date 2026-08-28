@@ -5,13 +5,13 @@ let servers = {};
 function register(name, url, owner) {
     servers[name] = {
         name,
-        url,
-        owner,
+        url, 
+        owner,     
         online: true,
         lastPulse: Date.now()
     };
 
-    log("INFO", `Server registered: [${name}] from ${owner}`);
+    log("INFO", `Server registered: [${name}] at ${url} from ${owner}`);
 }
 
 function pulse(name) {

@@ -5,7 +5,6 @@ const processManager = require("../services/processManager");
 const registry = require("../services/registry");
 const messages = require("../services/messages");
 
-// Identity (IP)
 function clientId(req) {
     return String(req.ip || "").replace(/^::ffff:/, "");
 }
@@ -58,6 +57,14 @@ router.post("/kill-server/:name", (req, res) => {
 // List
 router.get("/servers", (req, res) => {
     res.json(registry.getAll());
+});
+
+// Overview
+router.get("/overview", (req, res) => {
+    res.json(registry.getAll().map(server => ({
+        ...server,
+        messages: messages.get(server.name)
+    })));
 });
 
 // Receive a message from a mini server

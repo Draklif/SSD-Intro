@@ -7,7 +7,6 @@ const lastUpdate = document.getElementById("lastUpdate");
 button.addEventListener("click", createServer);
 reloadBtn.addEventListener("click", loadServers);
 
-// Nunca confiamos en el texto que viene de otro nodo
 function escapeHtml(text) {
     return String(text)
         .replaceAll("&", "&amp;")
@@ -46,20 +45,12 @@ async function loadServers() {
 }
 
 async function renderServers() {
-    const res = await fetch("/servers");
+    const res = await fetch("/overview");
     const servers = await res.json();
-
-    // Un fetch de mensajes por cada nodo registrado
-    const withMessages = await Promise.all(
-        servers.map(async (server) => {
-            const res = await fetch(`/send-message/${server.name}`);
-            return { ...server, messages: await res.json() };
-        })
-    );
 
     list.innerHTML = "";
 
-    withMessages.forEach(server => {
+    servers.forEach(server => {
         const items = server.messages.length
             ? server.messages.map(entry => `
                 <li class="message">
@@ -72,6 +63,7 @@ async function renderServers() {
         const li = document.createElement("li");
 
         const state = server.online ? "online" : "offline";
+        const url = server.url || "";
 
         li.innerHTML = `
             <div class="server-head">
@@ -79,9 +71,11 @@ async function renderServers() {
                     <span class="dot ${state}" title="${state}"></span>
                     ${escapeHtml(server.name)}
                 </strong>
-                <span class="meta">
-                    ${server.messages.length} msg · ${escapeHtml(server.owner || "?")}
-                </span>
+                <span class="meta">${server.messages.length} msg</span>
+            </div>
+            <div class="server-addr">
+                <a href="${encodeURI(url)}" target="_blank">${escapeHtml(url || "sin url")}</a>
+                <span class="ip">${escapeHtml(server.owner || "?")}</span>
             </div>
             <ul class="messages">${items}</ul>
         `;
